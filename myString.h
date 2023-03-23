@@ -9,12 +9,10 @@ private:
 	char* data;
 public:
 	myString() { size = 0; data = nullptr; }
-	~myString() { if (data != nullptr) delete[] data; }
+	~myString() { delete[] data; }
 	
 	myString(const char* newData) 
 	{
-		if (data != nullptr) 
-			delete[] data;
 		size = strlen(newData)+1;
 		data = new char[size];
 		for (int i = 0; i < size; i++)
@@ -23,10 +21,8 @@ public:
 		}
 	}
 
-	myString(myString& temp)
+	myString(const myString& temp)
 	{
-		if (data != nullptr)
-			delete[] data;
 		size = temp.size;
 		data = new char[size];
 		for (int i = 0; i < size; i++) {
@@ -34,13 +30,13 @@ public:
 		}
 	}
 
-	friend ostream& operator<<(ostream& os, myString s)
+	friend ostream& operator<<(ostream& os, const myString& s)
 	{
 		os << s.data;
 		return os;
 	}
 	
-	bool operator==(myString s) 
+	bool operator==(const myString& s) 
 	{
 		if (s.size != this->size) 
 			return false;
@@ -52,7 +48,7 @@ public:
 		return true;
 	}
 
-	myString& operator=(myString s)
+	myString& operator=(const myString& s)
 	{
 		if (data != nullptr)
 			delete[] data;
