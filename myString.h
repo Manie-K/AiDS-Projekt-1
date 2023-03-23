@@ -8,66 +8,23 @@ private:
 	size_t size;
 	char* data;
 public:
-	myString() { size = 0; data = nullptr; }
-	~myString() { delete[] data; }
+	//constructors
+	myString();
+	myString(const char* newData);
+	myString(const myString& temp);
+
+	~myString();
+
+	//methods
+	void pushCharAtEnd(char ch);
+
+	//operators
+	friend ostream& operator<<(ostream& os, const myString& s);
 	
-	myString(const char* newData) 
-	{
-		size = strlen(newData)+1;
-		data = new char[size];
-		for (int i = 0; i < size; i++)
-		{
-			data[i] = newData[i];
-		}
-	}
+	bool operator==(const myString& s) const;
 
-	myString(const myString& temp)
-	{
-		size = temp.size;
-		data = new char[size];
-		for (int i = 0; i < size; i++) {
-			data[i] = temp.data[i];
-		}
-	}
-
-	friend ostream& operator<<(ostream& os, const myString& s)
-	{
-		os << s.data;
-		return os;
-	}
+	myString& operator=(const myString& s);
+	myString& operator=(const char* s);
 	
-	bool operator==(const myString& s) 
-	{
-		if (s.size != this->size) 
-			return false;
-		for (int i = 0; i < size; i++)
-		{
-			if (data[i] != s.data[i])
-				return false;
-		}
-		return true;
-	}
-
-	myString& operator=(const myString& s)
-	{
-		if (data != nullptr)
-			delete[] data;
-		size = s.size;
-		data = new char[size];
-		for (int i = 0; i < size; i++)
-			data[i] = s.data[i];
-		return *this;
-	}
-
-	myString& operator=(const char* s)
-	{
-		if (data != nullptr)
-			delete[] data;
-		size = strlen(s)+1;
-		data = new char[size];
-		for (int i = 0; i < size; i++)
-			data[i] = s[i];
-		return *this;
-	}
-
+	char operator[](size_t index) const;
 };
