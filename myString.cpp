@@ -23,7 +23,7 @@ myString::myString(const myString& temp)
 	}
 }
 
-void myString::pushCharAtEnd(char ch)
+void myString::pushCharAtEnd(const char ch)
 {
 	if (ch != '\0')
 	{

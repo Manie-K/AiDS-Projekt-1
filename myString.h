@@ -16,7 +16,7 @@ public:
 	~myString();
 
 	//methods
-	void pushCharAtEnd(char ch);
+	void pushCharAtEnd(const char ch);
 
 	//operators
 	friend ostream& operator<<(ostream& os, const myString& s);

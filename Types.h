@@ -1,0 +1,24 @@
+#pragma once
+
+const int T = 8;
+
+typedef struct {
+	myString attribute;
+	myString value;
+} AttributeNode;
+typedef struct {
+	List<myString> selectorList;
+	List<AttributeNode> attributeList;
+
+} Section;
+
+struct ExternalNode{
+	unsigned short int counter;
+	Section* sections;
+
+	ExternalNode() : counter(0), sections(new Section[T]) {};
+	~ExternalNode() 
+	{
+		delete[] sections;
+	}
+};
