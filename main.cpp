@@ -12,7 +12,6 @@ int main()
 	List<ExternalNode> CSS;
 	Node<ExternalNode> startNode;
 	CSS.addFirst(startNode);
-	CSS.incrementSize();
 
 	int numberOfSections = 0;
 	char inputChar;
@@ -32,7 +31,8 @@ int main()
 		else if (inputChar == ',')
 		{
 			selector->data = currentInputString;
-			section->selectorList.addLast(*selector);
+			Node<myString> *tempSelector = new Node<myString>(*selector);
+			section->selectorList.addLast(*tempSelector);
 			currentInputString = "";
 
 			delete selector;
@@ -41,7 +41,8 @@ int main()
 		else if (inputChar == '{') //start of css section
 		{
 			selector->data = currentInputString;
-			section->selectorList.addLast(*selector);
+			Node<myString>* tempSelector = new Node<myString>(*selector);
+			section->selectorList.addLast(*tempSelector);
 			currentInputString = "";
 
 			delete selector;
@@ -60,7 +61,8 @@ int main()
 
 			attributeNode->data.value = currentInputString;
 			currentInputString = "";
-			section->attributeList.addLast(*attributeNode);
+			Node<AttributeNode> *tempAttr = new Node<AttributeNode>(*attributeNode);
+			section->attributeList.addLast(*tempAttr);
 			delete attributeNode;
 			attributeNode = new Node<AttributeNode>;
 		}
@@ -77,9 +79,8 @@ int main()
 			}
 			if (temp == nullptr)
 			{
-				Node<ExternalNode> newNode;
-				CSS.addLast(newNode);
-				CSS.incrementSize();
+				Node<ExternalNode>* newNode = new Node<ExternalNode>;
+				CSS.addLast(*newNode);
 				CSS.getLast()->data.sections[0] = *section;
 				CSS.getLast()->data.counter++;
 			}
@@ -87,10 +88,10 @@ int main()
 			{
 				int index = temp->data.counter;
 				CSS.getAfter(whichExternalNode)->data.counter++;
-				CSS.getAfter(whichExternalNode)->data.sections[index] = *section;
+				CSS.getAfter(whichExternalNode)->data.sections[index].attributeList = section->attributeList;
+				CSS.getAfter(whichExternalNode)->data.sections[index].selectorList = section->selectorList;
 			}
 
-			delete temp;
 			delete section;
 			section = new Section;
 		}

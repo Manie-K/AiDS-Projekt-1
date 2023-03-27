@@ -11,6 +11,12 @@ public:
 	Node* next;
 	
 	Node(){}
+	Node(const Node<T>& temp)
+	{
+		data = temp.data;
+		prev = temp.prev;
+		next = temp.next;
+	}
 	Node(const T& dt, Node* p = nullptr, Node* n = nullptr) : data(dt), prev(p),next(n) {};
 	~Node(){}
 

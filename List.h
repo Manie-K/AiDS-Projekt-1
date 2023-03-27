@@ -16,7 +16,13 @@ public:
 	~List()
 	{
 		//TODO!!!!!!!!!!!!!!!!!!!!!!!
-
+		Node<T>* temp = first;
+		while (temp->next != nullptr)
+		{
+			temp = temp->next;
+			delete temp->prev;
+		}
+		delete last;
 	}
 
 	void display() const

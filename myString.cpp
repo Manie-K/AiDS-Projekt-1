@@ -87,5 +87,5 @@ char myString::operator[](size_t index) const
 {
 	if (index >= 0 && index < size)
 		return (char)data[index];
-	return '?';
+	return ' ';
 }

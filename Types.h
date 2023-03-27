@@ -1,6 +1,6 @@
 #pragma once
 
-const int T = 8;
+const int T = 1;
 
 typedef struct {
 	myString attribute;
