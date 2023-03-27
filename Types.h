@@ -1,5 +1,7 @@
 #pragma once
 
+#define END_KEY 'x'
+#define ENTER_KEY '\n'
 const int T = 2;
 
 typedef struct {

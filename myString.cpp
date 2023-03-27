@@ -53,7 +53,7 @@ void myString::trim()
 	int endCount = 0;
 	for (int i = 0; i < size; i++)
 	{
-		if (data[i] == '\0' || data[i] == ' ' || data[i] == '\n')
+		if (data[i] == '\0' || data[i] == ' ' || data[i] == '\n' || data[i] == '\t' || data[i] == '\r' || data[i] == '\v' || data[i] == '\f')
 			beginCount++;
 		else
 			break;
@@ -61,7 +61,7 @@ void myString::trim()
 
 	for (int i = size - 1; i >= 0; i--)
 	{
-		if (data[i] == '\0' || data[i] == ' ' || data[i] == '\n')
+		if (data[i] == '\0' || data[i] == ' ' || data[i] == '\n' || data[i] == '\t' || data[i] == '\r' || data[i] == '\v' || data[i] == '\f')
 			endCount++;
 		else
 			break;
@@ -75,18 +75,27 @@ void myString::trim()
 		return;
 	}
 	int newSize = size + 1 - endCount - beginCount;
-	size = newSize;
-	char *tab = new char[size];
+	
+	char *tab = new char[newSize];
 	for (int i = beginCount; i < size; i++)
 	{
 		tab[i - beginCount] = data[i];
 	}
 	delete[] data;
+	size = newSize;
 	data = new char[size];
 	for (int i = 0; i < size; i++)
 		data[i] = tab[i];
+	data[size - 1] = '\0';
 	delete[] tab;
 }
+
+int myString::toInt() const
+{
+	return 5;
+}
+
+size_t myString::getSize() const{ return size; }
 
 ostream& operator<<(ostream& os, const myString& s)
 {

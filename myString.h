@@ -18,6 +18,10 @@ public:
 	//methods
 	void pushCharAtEnd(const char ch);
 	void trim();
+	int toInt() const;
+
+	//getters/setters
+	size_t getSize() const;
 
 	//operators
 	friend ostream& operator<<(ostream& os, const myString& s);
