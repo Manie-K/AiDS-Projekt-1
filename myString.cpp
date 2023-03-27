@@ -1,7 +1,9 @@
 #include "myString.h"
 
 myString::myString() { size = 0; data = nullptr; }
-myString::~myString() { delete[] data; }
+myString::~myString() { 
+	delete[] data; 
+}
 
 myString::myString(const char* newData)
 {

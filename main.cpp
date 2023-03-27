@@ -101,6 +101,12 @@ int main()
 		}
 	}
 	CSS.display();
+	delete section;
+	section = nullptr;
+	delete selector;
+	selector = nullptr;
+	delete attributeNode;
+	attributeNode = nullptr;
 
 	return 1;
 }
