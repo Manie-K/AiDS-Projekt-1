@@ -1,6 +1,6 @@
 #pragma once
 
-const int T = 1;
+const int T = 2;
 
 typedef struct {
 	myString attribute;
@@ -9,7 +9,6 @@ typedef struct {
 typedef struct {
 	List<myString> selectorList;
 	List<AttributeNode> attributeList;
-
 } Section;
 
 struct ExternalNode{

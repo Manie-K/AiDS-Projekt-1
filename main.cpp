@@ -14,7 +14,7 @@ int main()
 	CSS.addFirst(startNode);
 
 	int numberOfSections = 0;
-	char inputChar;
+	char inputChar = 'a';
 	myString currentInputString = "";
 	
 	Section* section = new Section;
@@ -22,8 +22,9 @@ int main()
 	Node<AttributeNode>* attributeNode = new Node<AttributeNode>;
 	
 
-	while (cin >> inputChar)
+	while (inputChar!=EOF)
 	{
+		inputChar = getchar();
 		if (inputChar == 'x')
 			break;
 		if (inputChar == ' ')
@@ -61,8 +62,26 @@ int main()
 
 			attributeNode->data.value = currentInputString;
 			currentInputString = "";
-			Node<AttributeNode> *tempAttr = new Node<AttributeNode>(*attributeNode);
-			section->attributeList.addLast(*tempAttr);
+			bool alreadyExist = false;
+			int i = 0;
+			Node<AttributeNode>* temp = section->attributeList.getFirst();
+			while (temp != nullptr)
+			{
+				if (temp->data.attribute == attributeNode->data.attribute)
+				{
+					alreadyExist = true;
+					break;
+				}
+				temp = temp->next;
+				i++;
+			}
+			if (alreadyExist) {
+				section->attributeList.getAfter(i)->data.value = attributeNode->data.value;
+			}
+			else {
+				Node<AttributeNode>* tempAttr = new Node<AttributeNode>(*attributeNode);
+				section->attributeList.addLast(*tempAttr);
+			}
 			delete attributeNode;
 			attributeNode = new Node<AttributeNode>;
 		}
@@ -88,8 +107,7 @@ int main()
 			{
 				int index = temp->data.counter;
 				CSS.getAfter(whichExternalNode)->data.counter++;
-				CSS.getAfter(whichExternalNode)->data.sections[index].attributeList = section->attributeList;
-				CSS.getAfter(whichExternalNode)->data.sections[index].selectorList = section->selectorList;
+				CSS.getAfter(whichExternalNode)->data.sections[index] = *section;
 			}
 
 			delete section;

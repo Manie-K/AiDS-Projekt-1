@@ -15,7 +15,6 @@ public:
 	List() :size(0), first(nullptr), last(nullptr) {}
 	~List()
 	{
-		//TODO!!!!!!!!!!!!!!!!!!!!!!!
 		Node<T>* current = first;
 		Node<T>* next = nullptr;
 

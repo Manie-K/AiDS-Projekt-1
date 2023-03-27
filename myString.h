@@ -17,6 +17,7 @@ public:
 
 	//methods
 	void pushCharAtEnd(const char ch);
+	void trim();
 
 	//operators
 	friend ostream& operator<<(ostream& os, const myString& s);

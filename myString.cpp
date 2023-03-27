@@ -47,6 +47,47 @@ void myString::pushCharAtEnd(const char ch)
 	}
 }
 
+void myString::trim()
+{
+	int beginCount = 0;
+	int endCount = 0;
+	for (int i = 0; i < size; i++)
+	{
+		if (data[i] == '\0' || data[i] == ' ' || data[i] == '\n')
+			beginCount++;
+		else
+			break;
+	}
+
+	for (int i = size - 1; i >= 0; i--)
+	{
+		if (data[i] == '\0' || data[i] == ' ' || data[i] == '\n')
+			endCount++;
+		else
+			break;
+	}
+
+	if (beginCount + endCount >= size)
+	{
+		delete[] data;
+		data = new char[1];
+		data[0] = '\0';
+		return;
+	}
+	int newSize = size + 1 - endCount - beginCount;
+	size = newSize;
+	char *tab = new char[size];
+	for (int i = beginCount; i < size; i++)
+	{
+		tab[i - beginCount] = data[i];
+	}
+	delete[] data;
+	data = new char[size];
+	for (int i = 0; i < size; i++)
+		data[i] = tab[i];
+	delete[] tab;
+}
+
 ostream& operator<<(ostream& os, const myString& s)
 {
 	os << s.data;
