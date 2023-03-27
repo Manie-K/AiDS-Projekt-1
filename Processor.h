@@ -4,7 +4,7 @@
 #include "Node.h"
 #include "List.h"
 #include "Types.h"
-
+#include "CommandManager.h"
 class Processor {
 private:
 	List<ExternalNode> CSS;
@@ -83,7 +83,7 @@ private:
 
 		if (questionCounter == 4)
 		{
-			modeCSS = true;
+			modeCSS = false;
 			questionCounter = 0;
 			currentInputString = "";
 			skip = true;
@@ -91,7 +91,7 @@ private:
 		if (starCounter == 4)
 		{
 			currentInputString = "";
-			modeCSS = false;
+			modeCSS = true;
 			starCounter = 0;
 			skip = true;
 		}
@@ -137,16 +137,64 @@ private:
 			manager.handleInput(currentInputString);
 			currentInputString = "";
 			if (manager.singleCharacterCommand)
-			{
+			{	// ? == x
 				cout << "? == " << numberOfSections << "\n";
 				return;
 			}
-			if (manager.lastIsNumber && manager.middleChar =='S')//only one such command
-			{
-
+			if (manager.lastIsNumber && manager.middleChar =='S')
+			{	// i S j
 				
+				return;
 			}
+			if (manager.lastIsAttribute)
+			{
+				if (manager.middleChar == 'A') // i A n
+				{
 
+					return;
+				}
+				if (manager.middleChar == 'E') // z E n
+				{
+
+					return;
+				}
+				if (manager.middleChar == 'D') // i D n
+				{
+
+					return;
+				}
+			}
+			if (manager.firstIsNumber)
+			{
+				if (manager.middleChar == 'S')// i S ?
+				{
+
+					return;
+				}
+				if (manager.middleChar == 'A')// i A ?
+				{
+
+					return;
+				}
+				if (manager.middleChar == 'D')// i D *
+				{
+
+					return;
+				}
+			}
+			else
+			{
+				if (manager.middleChar == 'A')// n A ?
+				{
+
+					return;
+				}
+				if (manager.middleChar == 'D')// z S ?
+				{
+
+					return;
+				}
+			}
 		}
 	}
 	void saveSelector()
@@ -232,82 +280,3 @@ private:
 	}
 };
 
-class CommandManager {
-	friend class Processor;
-private:
-	const int neverUsedChar = '@';
-	int firstNumber;
-	char middleChar;
-
-	int secondNumber;
-	char endChar;
-	myString lastAttribute;
-	
-	bool lastIsNumber;
-	bool lastIsSymbol;
-	bool lastIsAttribute;
-	bool singleCharacterCommand;
-private:
-	void handleInput(const myString& input)
-	{
-		const int asciiMinNum = 48, asciiMaxNum = 57;
-		myString firstNumberStr = "", secondNumberStr = "";
-		int i = 0;
-		
-		reset();
-		if (input.getSize() == 2) //	"?\0"
-		{
-			singleCharacterCommand = true;
-			return;
-		}
-		for (i = 0; i < input.getSize(); i++)
-		{
-			if (input[i] == ',') {
-				i++;
-				break;
-			}
-			else
-				firstNumberStr.pushCharAtEnd(input[i]);
-		}
-		
-		middleChar = input[i++];
-		
-		for (i; i < input.getSize(); i++)
-		{
-			if (input[i] == '?' || input[i] == '*')
-			{
-				endChar = input[i];
-				lastIsSymbol = true;
-				break;
-			}
-			else if ((int)input[i] >= asciiMinNum && (int)input[i] <= asciiMaxNum)//it's a number
-			{
-				for (i; i < input.getSize()-1; i++)//-1, without '\0'
-					secondNumberStr.pushCharAtEnd(input[i]);
-				lastIsNumber = true;
-				break;
-			}
-			else //it's attribute
-			{
-				for (i; i < input.getSize(); i++)
-					lastAttribute.pushCharAtEnd(input[i]);
-				lastIsAttribute = true;
-				break;
-			}
-		}
-		firstNumber = firstNumberStr.toInt();
-		secondNumber = secondNumberStr.toInt();
-	}
-public:
-	CommandManager()
-	{
-		reset();
-	};
-	void reset()
-	{
-		firstNumber = secondNumber = 0;
-		middleChar = endChar = neverUsedChar;
-		lastAttribute = "";
-		lastIsNumber = lastIsSymbol = lastIsAttribute = singleCharacterCommand = false;
-	}
-};

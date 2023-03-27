@@ -75,8 +75,8 @@ void myString::trim()
 		return;
 	}
 	int newSize = size + 1 - endCount - beginCount;
-	
-	char *tab = new char[newSize];
+
+	char* tab = new char[newSize];
 	for (int i = beginCount; i < size; i++)
 	{
 		tab[i - beginCount] = data[i];
@@ -92,7 +92,16 @@ void myString::trim()
 
 int myString::toInt() const
 {
-	return 5;
+	int result = 0;
+	int tenPower = 1;
+
+	for (int i = size - 1; i >= 0; i--)
+	{
+		result += (int)data[i] * tenPower;
+		tenPower *= 10;
+	}
+
+	return result;
 }
 
 size_t myString::getSize() const{ return size; }
