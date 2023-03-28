@@ -15,15 +15,12 @@ public:
 	List() :size(0), first(nullptr), last(nullptr) {}
 	~List()
 	{
-		Node<T>* current = first;
-		Node<T>* next = nullptr;
+		deleteList();
+	}
 
-		while (current != nullptr)
-		{
-			next = current->next;
-			//delete current;
-			current = next;
-		}
+	void deleteList()
+	{
+
 	}
 
 	void display() const
@@ -131,6 +128,16 @@ public:
 	}
 
 	int getSize() { return size; }
-	void incrementSize(){size++;}
-	void decrementSize() { size--; }
+	void countStringOccurences(const myString& s) const
+	{
+		int times = 0;
+		Node<T>* temp = first;
+		while (temp != nullptr)
+		{
+			if (temp->data == s)
+				times++;
+			temp = temp->next;
+		}
+		return times;
+	}
 };

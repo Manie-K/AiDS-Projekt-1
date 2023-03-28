@@ -136,17 +136,17 @@ private:
 		{
 			manager.handleInput(currentInputString);
 			currentInputString = "";
-			if (manager.singleCharacterCommand)
+			if (manager.config.singleCharacterCommand)
 			{	// ? == x
 				cout << "? == " << numberOfSections << "\n";
 				return;
 			}
-			if (manager.lastIsNumber && manager.middleChar =='S')
+			if (manager.config.lastIsNumber && manager.middleChar =='S')
 			{	// i S j
 				
 				return;
 			}
-			if (manager.lastIsAttribute)
+			if (manager.config.lastIsAttribute)
 			{
 				if (manager.middleChar == 'A') // i A n
 				{
@@ -164,7 +164,7 @@ private:
 					return;
 				}
 			}
-			if (manager.firstIsNumber)
+			if (manager.config.firstIsNumber)
 			{
 				if (manager.middleChar == 'S')// i S ?
 				{
@@ -244,16 +244,20 @@ private:
 	void addSection(int index, int whichExternalNode)
 	{
 		CSS.getAfter(whichExternalNode)->data.counter++;
+		CSS.getAfter(whichExternalNode)->data.aliveCount++;
 		CSS.getAfter(whichExternalNode)->data.sections[index].selectorList = section->selectorList;
 		CSS.getAfter(whichExternalNode)->data.sections[index].attributeList = section->attributeList;
+		CSS.getAfter(whichExternalNode)->data.sections[index].alive = true;
 	}
 	void addNewNodeAndSection() 
 	{
 		Node<ExternalNode>* newNode = new Node<ExternalNode>;
 		CSS.addLast(*newNode);
 		CSS.getLast()->data.counter++;
+		CSS.getLast()->data.aliveCount++;
 		CSS.getLast()->data.sections[0].selectorList = section->selectorList;
 		CSS.getLast()->data.sections[0].attributeList = section->attributeList;
+		CSS.getLast()->data.sections[0].alive = true;
 	}
 	void endSection()
 	{
@@ -277,6 +281,62 @@ private:
 
 		delete section;
 		section = new Section;
+	}
+	SectionAndBlockNumber getXsection(int x)
+	{
+		int skipped = 0;
+		Node<ExternalNode>* external = CSS.getFirst();
+		while (external != nullptr)
+		{
+			if (x > external->data.aliveCount)
+			{
+				x -= external->data.aliveCount;
+				external = external->next;
+				skipped++;
+				break;
+			}
+			else
+			{
+				int i = 0;
+				while (x > 0)
+				{
+					if (external->data.sections[i].alive)
+					{
+						x--;
+						i++;
+					}
+				}
+				return { external->data.sections[i],skipped};
+			}
+
+		}
+		Section section;
+		section.alive = false; //we have to check if section returned is alive
+		return { section,  skipped};
+	}
+	void deleteSection(int x)
+	{
+		SectionAndBlockNumber temp = getXsection(x);
+		Section section = temp.section;
+		Node<ExternalNode>* node;
+		int index = temp.n;
+		if (index > 0)
+			node = CSS.getAfter(index-1);
+		else if (index == 0)
+			node = CSS.getFirst();
+
+		if (section.alive) //such section exist
+		{
+			section.alive = false;
+			node->data.aliveCount--;
+			if (node->data.aliveCount <= 0)
+			{
+				if (index > 0)
+					CSS.deleteAfter(index - 1);
+				else if (index == 0)
+					CSS.deleteFirst();
+			}
+		}
 	}
 };
 

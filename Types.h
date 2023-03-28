@@ -11,15 +11,31 @@ typedef struct {
 typedef struct {
 	List<myString> selectorList;
 	List<AttributeNode> attributeList;
+	bool alive = true;
 } Section;
 
 struct ExternalNode{
-	unsigned short int counter;
+	short int counter;
+	short int aliveCount;
 	Section* sections;
 
-	ExternalNode() : counter(0), sections(new Section[T]) {};
+	ExternalNode() : counter(0),aliveCount(0), sections(new Section[T]) {};
 	~ExternalNode() 
 	{
 		delete[] sections;
 	}
+};
+
+struct CommandDispatchConfig {
+	bool lastIsNumber;
+	bool lastIsSymbol;
+	bool lastIsAttribute;
+	bool singleCharacterCommand;
+	bool firstIsNumber;
+};
+
+struct SectionAndBlockNumber
+{
+	Section& section;
+	int n;
 };

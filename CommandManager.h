@@ -11,11 +11,7 @@ private:
 	myString lastAttribute;
 	myString firstAttribute;
 
-	bool lastIsNumber;
-	bool lastIsSymbol;
-	bool lastIsAttribute;
-	bool singleCharacterCommand;
-	bool firstIsNumber;
+	CommandDispatchConfig config;
 private:
 	void handleInput(const myString& input)
 	{
@@ -26,7 +22,7 @@ private:
 		reset();
 		if (input.getSize() == 2) //	"?\0"
 		{
-			singleCharacterCommand = true;
+			config.singleCharacterCommand = true;
 			return;
 		}
 		//before first ,
@@ -38,7 +34,7 @@ private:
 			}
 			else if ((int)input[i] >= asciiMinNum && (int)input[i] <= asciiMaxNum) {
 				firstNumberStr.pushCharAtEnd(input[i]);
-				firstIsNumber = true;
+				config.firstIsNumber = true;
 			}
 			else
 				firstAttribute.pushCharAtEnd(input[i]);
@@ -51,21 +47,21 @@ private:
 			if (input[i] == '?' || input[i] == '*')
 			{
 				endChar = input[i];
-				lastIsSymbol = true;
+				config.lastIsSymbol = true;
 				break;
 			}
 			else if ((int)input[i] >= asciiMinNum && (int)input[i] <= asciiMaxNum)//it's a number
 			{
 				for (i; i < input.getSize() - 1; i++)//-1, without '\0'
 					secondNumberStr.pushCharAtEnd(input[i]);
-				lastIsNumber = true;
+				config.lastIsNumber = true;
 				break;
 			}
 			else //it's attribute
 			{
 				for (i; i < input.getSize(); i++)
 					lastAttribute.pushCharAtEnd(input[i]);
-				lastIsAttribute = true;
+				config.lastIsAttribute = true;
 				break;
 			}
 		}
@@ -82,6 +78,6 @@ public:
 		firstNumber = secondNumber = 0;
 		middleChar = endChar = neverUsedChar;
 		lastAttribute = firstAttribute = "";
-		lastIsNumber = lastIsSymbol = lastIsAttribute = singleCharacterCommand =firstIsNumber = false;
+		config = { false, false, false, false, false };
 	}
 };
