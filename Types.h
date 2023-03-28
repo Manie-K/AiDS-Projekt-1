@@ -1,6 +1,6 @@
 #pragma once
 
-#define END_KEY '^'
+#define END_KEY '\xff'
 #define ENTER_KEY '\n'
 const int T = 1;
 

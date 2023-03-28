@@ -111,7 +111,7 @@ private:
 			}
 		}
 
-		else if (inputChar == ':')
+		else if (inputChar == ':'&& attributes)
 		{
 			currentInputString.trim();
 			attributeNode->data.attribute = currentInputString;
