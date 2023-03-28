@@ -7,6 +7,12 @@ myString::~myString() {
 
 myString::myString(const char* newData)
 {
+	if (newData == nullptr)
+	{
+		data = nullptr;
+		size = 0;
+		return;
+	}
 	size = strlen(newData) + 1;
 	data = new char[size];
 	for (int i = 0; i < size; i++)
@@ -17,6 +23,12 @@ myString::myString(const char* newData)
 
 myString::myString(const myString& temp)
 {
+	if (temp == nullptr)
+	{
+		size = 0;
+		data = nullptr;
+		return;
+	}
 	size = temp.size;
 	data = new char[size];
 	for (int i = 0; i < size; i++)
@@ -27,6 +39,8 @@ myString::myString(const myString& temp)
 
 void myString::pushCharAtEnd(const char ch)
 {
+	if (this == nullptr || data == nullptr)
+		return;
 	if (ch != '\0')
 	{
 		char* temp = new char[size];
@@ -118,9 +132,9 @@ int myString::toInt() const
 	return result;
 }
 
-size_t myString::getSize() const{ return size; }
+size_t myString::getSize() const {return size; }
 
-ostream& operator<<(ostream& os, const myString& s)
+ostream& operator<<(ostream& os, const myString& s) 
 {
 	os << s.data;
 	return os;
@@ -128,6 +142,8 @@ ostream& operator<<(ostream& os, const myString& s)
 
 bool myString::operator==(const myString& s) const
 {
+	if (this==nullptr)
+		return false;
 	if (s.size != this->size)
 		return false;
 	for (int i = 0; i < size; i++)
@@ -140,6 +156,8 @@ bool myString::operator==(const myString& s) const
 
 myString& myString::operator=(const myString& s)
 {
+	if (this == nullptr || s == nullptr || s.data == nullptr)
+		return *this;
 	delete[] data;
 	size = s.size;
 	data = new char[size];
@@ -150,6 +168,8 @@ myString& myString::operator=(const myString& s)
 
 myString& myString::operator=(const char* s)
 {
+	if (s == nullptr || this == nullptr)
+		return *this;
 	delete[] data;
 	size = strlen(s) + 1;
 	data = new char[size];
@@ -160,6 +180,8 @@ myString& myString::operator=(const char* s)
 
 char myString::operator[](size_t index) const
 {
+	if (this == nullptr || data == nullptr)
+		return ' ';
 	if (index >= 0 && index < size)
 		return (char)data[index];
 	return ' ';
