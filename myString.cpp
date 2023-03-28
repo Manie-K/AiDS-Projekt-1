@@ -44,6 +44,7 @@ void myString::pushCharAtEnd(const char ch)
 		data[size - 1] = '\0';
 
 		delete[] temp;
+		temp = nullptr;
 	}
 }
 
@@ -51,6 +52,7 @@ void myString::trim()
 {
 	int beginCount = 0;
 	int endCount = 0;
+	
 	for (int i = 0; i < size; i++)
 	{
 		if (data[i] == '\0' || data[i] == ' ' || data[i] == '\n' || data[i] == '\t' || data[i] == '\r' || data[i] == '\v' || data[i] == '\f')
@@ -77,17 +79,18 @@ void myString::trim()
 	int newSize = size + 1 - endCount - beginCount;
 
 	char* tab = new char[newSize];
-	for (int i = beginCount; i < size; i++)
+	for (int i = beginCount; i <= size-endCount; i++)
 	{
 		tab[i - beginCount] = data[i];
 	}
+	tab[newSize - 1] = '\0';
 	delete[] data;
 	size = newSize;
 	data = new char[size];
 	for (int i = 0; i < size; i++)
 		data[i] = tab[i];
 	data[size - 1] = '\0';
-	delete[] tab;
+	delete[] tab;  //TUTAJ ERROR???????????
 }
 
 int myString::toInt() const
