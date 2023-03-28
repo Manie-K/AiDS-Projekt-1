@@ -76,11 +76,10 @@ private:
 		if (inputChar == '*')
 		{
 			starCounter++;
-			skip = true;
 		}
-		else
+		else {
 			starCounter = 0;
-
+		}
 		if (questionCounter == 4)
 		{
 			modeCSS = false;
@@ -178,7 +177,8 @@ private:
 				}
 				if (manager.middleChar == 'D')// i D *
 				{
-
+					if (deleteSection(manager.firstNumber))
+						cout << manager.firstNumber << ",D,* == deleted\n";
 					return;
 				}
 			}
@@ -297,15 +297,15 @@ private:
 			}
 			else
 			{
-				int i = 0;
-				while (x > 0)
+				int i = -1;
+				do
 				{
+					i++;
 					if (external->data.sections[i].alive)
 					{
 						x--;
-						i++;
 					}
-				}
+				} while (x > 0);
 				return { external->data.sections[i],skipped};
 			}
 
@@ -314,29 +314,37 @@ private:
 		section.alive = false; //we have to check if section returned is alive
 		return { section,  skipped};
 	}
-	void deleteSection(int x)
+	bool deleteSection(int x)
 	{
 		SectionAndBlockNumber temp = getXsection(x);
 		Section section = temp.section;
-		Node<ExternalNode>* node;
+		if (!section.alive)
+			return false;
+		Node<ExternalNode>* node = nullptr;
 		int index = temp.n;
 		if (index > 0)
 			node = CSS.getAfter(index-1);
-		else if (index == 0)
+		else
 			node = CSS.getFirst();
 
 		if (section.alive) //such section exist
 		{
 			section.alive = false;
+			section.attributeList.deleteList();
+			section.selectorList.deleteList();
 			node->data.aliveCount--;
+			numberOfSections--;
 			if (node->data.aliveCount <= 0)
 			{
 				if (index > 0)
 					CSS.deleteAfter(index - 1);
-				else if (index == 0)
+				else
 					CSS.deleteFirst();
+				CSS.decrementSize();
+				
 			}
 		}
+		return true;
 	}
 };
 

@@ -95,12 +95,15 @@ void myString::trim()
 
 int myString::toInt() const
 {
+	if (data == "") 
+		return 0;
+	const int asciiOffset = 48;
 	int result = 0;
 	int tenPower = 1;
 
-	for (int i = size - 1; i >= 0; i--)
+	for (int i = size - 2; i >= 0; i--)
 	{
-		result += (int)data[i] * tenPower;
+		result += (int)(data[i] - asciiOffset)* tenPower;
 		tenPower *= 10;
 	}
 

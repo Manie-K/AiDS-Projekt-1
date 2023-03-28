@@ -20,7 +20,7 @@ public:
 
 	void deleteList()
 	{
-
+		//TODO
 	}
 
 	void display() const
@@ -52,9 +52,13 @@ public:
 	void deleteFirst()
 	{
 		size--;
-		first = first->next;
-		delete first->prev;
-		first->prev = nullptr;
+		if (size == 0)
+			delete first;
+		else {
+			first = first->next;
+			delete first->prev;
+			first->prev = nullptr;
+		}
 	}
 
 	void addLast(Node<T>& node)
@@ -75,9 +79,13 @@ public:
 	void deleteLast()
 	{
 		size--;
-		last = last->prev;
-		delete last->next;
-		last->next = nullptr;
+		if (size == 0)
+			delete last;
+		else {
+			last = last->prev;
+			delete last->next;
+			last->next = nullptr;
+		}
 	}
 
 	void addAfter(Node<T>& node, size_t index) //index from 0, so:  addAfter(0) adds after first, addAfter(1) adds after second
@@ -106,12 +114,12 @@ public:
 		Node<T>* current = first;
 		for (int i = 0; i < index; i++)
 		{
-			current = current.next;
+			current = current->next;
 		}
 		//deleting after current
-		current.prev.next = current.next;
-		current.next.prev = current.prev;
-		current.next = current.prev = nullptr;
+		current->prev->next = current->next;
+		current->next->prev = current->prev;
+		current->next = current->prev = nullptr;
 		delete current;
 	}
 
@@ -140,4 +148,5 @@ public:
 		}
 		return times;
 	}
+	void decrementSize() { size--; }
 };

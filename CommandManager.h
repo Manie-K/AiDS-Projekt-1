@@ -13,14 +13,15 @@ private:
 
 	CommandDispatchConfig config;
 private:
-	void handleInput(const myString& input)
+	void handleInput(const myString& in)
 	{
 		const int asciiMinNum = 48, asciiMaxNum = 57;
 		myString firstNumberStr = "", secondNumberStr = "";
 		int i = 0;
-
+		myString input = in;
+		input.trim();
 		reset();
-		if (input.getSize() == 2) //	"?\0"
+		if (input == "?") //	"?\0"
 		{
 			config.singleCharacterCommand = true;
 			return;
@@ -42,6 +43,7 @@ private:
 
 		middleChar = input[i++];
 		i++; //to skip second ','
+
 		for (i; i < input.getSize(); i++)
 		{
 			if (input[i] == '?' || input[i] == '*')
@@ -65,8 +67,10 @@ private:
 				break;
 			}
 		}
-		firstNumber = firstNumberStr.toInt();
-		secondNumber = secondNumberStr.toInt();
+		if(!(firstNumberStr==""))
+			firstNumber = firstNumberStr.toInt();
+		if(!(secondNumberStr==""))
+			secondNumber = secondNumberStr.toInt();
 	}
 public:
 	CommandManager()

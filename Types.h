@@ -11,7 +11,7 @@ typedef struct {
 typedef struct {
 	List<myString> selectorList;
 	List<AttributeNode> attributeList;
-	bool alive = true;
+	bool alive;
 } Section;
 
 struct ExternalNode{
@@ -19,7 +19,7 @@ struct ExternalNode{
 	short int aliveCount;
 	Section* sections;
 
-	ExternalNode() : counter(0),aliveCount(0), sections(new Section[T]) {};
+	ExternalNode() : counter(0), aliveCount(0), sections(new Section[T]) {};
 	~ExternalNode() 
 	{
 		delete[] sections;
