@@ -2,17 +2,17 @@
 
 #define END_KEY '^'
 #define ENTER_KEY '\n'
-const int T = 2;
+const int T = 1;
 
 typedef struct {
 	myString attribute;
 	myString value;
 } AttributeNode;
-typedef struct {
+struct Section{
 	List<myString> selectorList;
 	List<AttributeNode> attributeList;
-	bool alive;
-} Section;
+	bool alive = true;
+};
 
 struct ExternalNode{
 	short int counter;

@@ -19,6 +19,7 @@ private:
 		myString firstNumberStr = "", secondNumberStr = "";
 		int i = 0;
 		myString input = in;
+		bool isNumber = false;
 		input.trim();
 		reset();
 		if (input == "?") //	"?\0"
@@ -29,16 +30,21 @@ private:
 		//before first ,
 		for (i = 0; i < input.getSize(); i++)
 		{
+			if (i == 0 && ((input[i] >= asciiMinNum && (int)input[i] <= asciiMaxNum)||input[i]=='-'))
+			{
+				isNumber = true;
+			}
 			if (input[i] == ',') {
 				i++;
 				break;
 			}
-			else if ((int)input[i] >= asciiMinNum && (int)input[i] <= asciiMaxNum) {
+			else if (isNumber&&(int)input[i] >= asciiMinNum && (int)input[i] <= asciiMaxNum) {
 				firstNumberStr.pushCharAtEnd(input[i]);
 				config.firstIsNumber = true;
 			}
-			else
+			else {
 				firstAttribute.pushCharAtEnd(input[i]);
+			}
 		}
 
 		middleChar = input[i++];

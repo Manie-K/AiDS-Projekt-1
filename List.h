@@ -106,9 +106,9 @@ public:
 		node.next.prev = node;
 	}
 
-	void deleteAfter(size_t index)
+	void deleteAt(size_t index)
 	{
-		if (index >= size - 1)
+		if (index >= size - 1 || index <0)
 			return;
 		size--;
 		Node<T>* current = first;
@@ -116,16 +116,18 @@ public:
 		{
 			current = current->next;
 		}
-		//deleting after current
-		current->prev->next = current->next;
-		current->next->prev = current->prev;
+		//deleting current
+		if(current->prev->next!=nullptr)
+			current->prev->next = current->next;
+		if(current->next->prev != nullptr)
+			current->next->prev = current->prev;
 		current->next = current->prev = nullptr;
 		delete current;
 	}
 
 	Node<T>* getFirst()const { return first; }
 	Node<T>* getLast() const { return last; }
-	Node<T>* getAfter(size_t index) const
+	Node<T>* getAt(size_t index) const
 	{
 		if (index < 0 || index >= size)
 			return nullptr;
@@ -135,7 +137,7 @@ public:
 		return temp;
 	}
 
-	int getSize() { return size; }
+	size_t getSize() { return size; }
 	void countStringOccurences(const myString& s) const
 	{
 		int times = 0;

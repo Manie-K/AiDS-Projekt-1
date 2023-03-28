@@ -50,6 +50,8 @@ void myString::pushCharAtEnd(const char ch)
 
 void myString::trim()
 {
+	if (size == 1)
+		return;
 	int beginCount = 0;
 	int endCount = 0;
 	
@@ -74,6 +76,7 @@ void myString::trim()
 		delete[] data;
 		data = new char[1];
 		data[0] = '\0';
+		size = 1;
 		return;
 	}
 	int newSize = size + 1 - endCount - beginCount;
@@ -90,7 +93,7 @@ void myString::trim()
 	for (int i = 0; i < size; i++)
 		data[i] = tab[i];
 	data[size - 1] = '\0';
-	delete[] tab;  //TUTAJ ERROR???????????
+	delete[] tab;  
 }
 
 int myString::toInt() const
@@ -103,7 +106,12 @@ int myString::toInt() const
 
 	for (int i = size - 2; i >= 0; i--)
 	{
-		result += (int)(data[i] - asciiOffset)* tenPower;
+		if (data[i] == '-')
+		{
+			result *= -1;
+			continue;
+		}
+		result += (int)(data[i] - asciiOffset) * tenPower;
 		tenPower *= 10;
 	}
 

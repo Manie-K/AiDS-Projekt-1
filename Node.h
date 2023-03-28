@@ -7,8 +7,8 @@ class Node
 {
 public:
 	T data;
-	Node* prev;
-	Node* next;
+	Node* prev = nullptr;
+	Node* next=nullptr;
 	
 	Node(){}
 	Node(const Node<T>& temp)
