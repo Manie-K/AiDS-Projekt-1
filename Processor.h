@@ -142,7 +142,16 @@ private:
 			}
 			if (manager.config.lastIsNumber && manager.middleChar =='S')
 			{	// i S j
-				
+				Section section = getXsection(manager.firstNumber).section;
+				if (section.alive && section.selectorList.getSize()>manager.secondNumber-1) 
+				{
+					cout << manager.firstNumber << ",S," << manager.secondNumber << " == ";
+					if (manager.secondNumber == 1)
+						cout << section.selectorList.getFirst()->data;
+					else
+						cout << section.selectorList.getAfter(manager.secondNumber - 1)->data;
+					cout << "\n";
+				}
 				return;
 			}
 			if (manager.config.lastIsAttribute)
@@ -167,7 +176,12 @@ private:
 			{
 				if (manager.middleChar == 'S')// i S ?
 				{
-
+					int count = 0;
+					Section section = getXsection(manager.firstNumber).section;
+					if (section.alive) {
+						count = section.selectorList.getSize();
+						cout << manager.firstNumber << ",S,? == " << count << "\n";
+					}
 					return;
 				}
 				if (manager.middleChar == 'A')// i A ?
