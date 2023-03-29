@@ -2,7 +2,10 @@
 
 myString::myString() { size = 0; data = nullptr; }
 myString::~myString() { 
-	delete[] data; 
+	if (this != nullptr) {
+		delete[] data;
+		data = nullptr;
+	}
 }
 
 myString::myString(const char* newData)
@@ -142,7 +145,9 @@ ostream& operator<<(ostream& os, const myString& s)
 
 bool myString::operator==(const myString& s) const
 {
-	if (this==nullptr)
+	if (this == nullptr)
+		return false;
+	if (data == nullptr || &s == nullptr || s.data == nullptr)
 		return false;
 	if (s.size != this->size)
 		return false;
@@ -156,7 +161,7 @@ bool myString::operator==(const myString& s) const
 
 myString& myString::operator=(const myString& s)
 {
-	if (this == nullptr || s == nullptr || s.data == nullptr)
+	if (this == nullptr || &s == nullptr || s.data == nullptr)
 		return *this;
 	delete[] data;
 	size = s.size;

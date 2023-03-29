@@ -284,14 +284,14 @@ private:
 					}
 					return;
 				}
-				if (manager.middleChar == 'D')// i D *
-				{
-					if (manager.firstNumber <= 0)
-						return;
-					if (deleteSection(manager.firstNumber))
-						cout << manager.firstNumber << ",D,* == deleted\n";
-					return;
-				}
+				//if (manager.middleChar == 'D')// i D *
+				//{
+				//	if (manager.firstNumber <= 0)
+				//		return;
+				//	if (deleteSection(manager.firstNumber))
+				//		cout << manager.firstNumber << ",D,* == deleted\n";
+				//	return;
+				//}
 			}
 			else
 			{
@@ -431,7 +431,7 @@ private:
 
 		Node<ExternalNode>* temp = CSS.getFirst();
 		int whichExternalNode = 0;
-		while (temp != nullptr)
+		while (temp != nullptr )
 		{
 			if (temp->data.counter < T)
 				break;

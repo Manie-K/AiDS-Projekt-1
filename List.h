@@ -15,24 +15,12 @@ public:
 	List() :size(0), first(nullptr), last(nullptr) {}
 	~List()
 	{
-		deleteList();
+		//deleteList();
 	}
 
 	void deleteList()
 	{
 		//TODO
-	}
-
-	void display() const
-	{
-		Node<T>* current = first;
-		int i = 0;
-		cout << endl;
-		while (current != nullptr)
-		{
-			cout << ++i << " " << current << endl;
-			current = current->next;
-		}
 	}
 
 	void addFirst(Node<T>& node)
@@ -51,13 +39,19 @@ public:
 
 	void deleteFirst()
 	{
+		if (this == nullptr)
+			return;
 		size--;
 		if (size == 0)
 			delete first;
 		else {
-			first = first->next;
-			delete first->prev;
-			first->prev = nullptr;
+			if (first == nullptr)
+				delete first;
+			else {
+				first = first->next;
+				delete first->prev;
+				first->prev = nullptr;
+			}
 		}
 	}
 
@@ -78,13 +72,19 @@ public:
 
 	void deleteLast()
 	{
+		if (this == nullptr)
+			return;
 		size--;
 		if (size == 0)
 			delete last;
 		else {
-			last = last->prev;
-			delete last->next;
-			last->next = nullptr;
+			if (last == nullptr)
+				delete last;
+			else {
+				last = last->prev;
+				delete last->next;
+				last->next = nullptr;
+			}
 		}
 	}
 
@@ -114,19 +114,25 @@ public:
 		Node<T>* current = first;
 		for (int i = 0; i < index; i++)
 		{
-			current = current->next;
+			if(current!=nullptr)
+				current = current->next;
 		}
 		//deleting current
-		if(current->prev->next!=nullptr)
+		if(current->prev!=nullptr)
 			current->prev->next = current->next;
-		if(current->next->prev != nullptr)
+		if(current->next != nullptr)
 			current->next->prev = current->prev;
 		current->next = current->prev = nullptr;
 		delete current;
 	}
 
-	Node<T>* getFirst()const { return first; }
-	Node<T>* getLast() const { return last; }
+	Node<T>* getFirst()const { 
+		
+		return first==nullptr ? nullptr : first; 
+	}
+	Node<T>* getLast() const { 
+		return last==nullptr?nullptr:last; 
+	}
 	Node<T>* getAt(size_t index) const
 	{
 		if (index < 0 || index >= size)
