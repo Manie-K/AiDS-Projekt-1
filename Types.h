@@ -1,18 +1,22 @@
 #pragma once
+#include <iostream>
+#include "myString.h"
+#include "Node.h"
+#include "newList.h"
 
 #define END_KEY '\xff'
 #define ENTER_KEY '\n'
-const int T = 8;
+#define Tcount 8
 
-typedef struct {
+struct AttributeNode {
 	myString attribute;
 	myString value;
-} AttributeNode;
+};
+
 struct Section{
 	List<myString> selectorList;
 	List<AttributeNode> attributeList;
-	bool alive;
-	Section() { alive = true;}
+	bool alive = true;
 };
 
 struct ExternalNode{
@@ -20,11 +24,8 @@ struct ExternalNode{
 	short int aliveCount;
 	Section* sections;
 
-	ExternalNode() : counter(0), aliveCount(0), sections(new Section[T]) {};
-	~ExternalNode() 
-	{
-		delete[] sections;
-	}
+	ExternalNode() : counter(0), aliveCount(0), sections(new Section[Tcount]) {};
+	~ExternalNode() {delete[] sections;}
 };
 
 struct CommandDispatchConfig {

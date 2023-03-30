@@ -5,13 +5,13 @@ using namespace std;
 
 int main()
 {
-	Processor processor;
+	Processor CSSprocessor;
 	char inputChar;
 
 	do
 	{
 		inputChar = getchar();
-		processor.manageInput(inputChar);
+		CSSprocessor.manageInput(inputChar);
 	} while (inputChar != END_KEY);
 
 	return 1;

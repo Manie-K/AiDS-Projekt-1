@@ -141,7 +141,6 @@ public:
 			temp->prev->next= temp->next;
 		}
 		size--;
-		//delete temp;
 		temp = nullptr;
 	}
 };
