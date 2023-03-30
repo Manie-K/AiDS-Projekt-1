@@ -50,12 +50,12 @@ public:
 		size--;
 		if (size == 0) {
 			delete first;
-			first == nullptr;
+			first = nullptr;
 		}
 		else {
 			if (first == nullptr) {
 				delete first;
-				first == nullptr;
+				first = nullptr;
 			}
 			else {
 				first = first->next;
@@ -121,6 +121,8 @@ public:
 			return;
 		size--;
 		Node<T>* current = first;
+		if (current == nullptr)
+			return;
 		for (int i = 0; i < index; i++)
 		{
 			if(current!=nullptr)

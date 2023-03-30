@@ -37,6 +37,6 @@ struct CommandDispatchConfig {
 
 struct SectionAndBlockNumber
 {
-	Section& section;
+	Section* section;
 	int n;
 };

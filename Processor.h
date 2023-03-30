@@ -149,16 +149,16 @@ private:
 			{	// i S j
 				if (manager.firstNumber <= 0 || manager.secondNumber <= 0)
 					return;
-				Section section = getXsection(manager.firstNumber).section;
-				if (section.alive && (section.selectorList.getSize()>manager.secondNumber-1)) 
+				Section* section = getXsection(manager.firstNumber).section;
+				if (section!=nullptr && (section->selectorList.getSize()>manager.secondNumber-1)) 
 				{
 					myString str = "";
 					if (manager.secondNumber == 1)
-						if(section.selectorList.getFirst()!=nullptr)
-							str= section.selectorList.getFirst()->data;
+						if(section->selectorList.getFirst()!=nullptr)
+							str= section->selectorList.getFirst()->data;
 					else
-						if(section.selectorList.getAt(manager.secondNumber - 1)!=nullptr)
-							str = section.selectorList.getAt(manager.secondNumber - 1)->data;
+						if(section->selectorList.getAt(manager.secondNumber - 1)!=nullptr)
+							str = section->selectorList.getAt(manager.secondNumber - 1)->data;
 					cout << manager.firstNumber << ",S," << manager.secondNumber << " == ";
 					cout << str << "\n";
 				}
@@ -170,10 +170,10 @@ private:
 				{
 					if (manager.firstNumber <= 0)
 						return;
-					Section section = getXsection(manager.firstNumber).section;
-					if (section.alive)
+					Section* section = getXsection(manager.firstNumber).section;
+					if (section!=nullptr)
 					{
-						Node<AttributeNode> *temp = section.attributeList.getFirst();
+						Node<AttributeNode> *temp = section->attributeList.getFirst();
 						while(temp!=nullptr)
 						{ 
 							if (temp->data.attribute == manager.lastAttribute)
@@ -234,23 +234,23 @@ private:
 				{
 					if (manager.firstNumber <= 0)
 						return;
-					Section section = getXsection(manager.firstNumber).section;//section to kopia???
-					Node<AttributeNode>* tempAttr = section.attributeList.getFirst();
+					Section* section = getXsection(manager.firstNumber).section;//section to kopia???
+					Node<AttributeNode>* tempAttr = section->attributeList.getFirst();
 					int index = 0;
 					while (tempAttr != nullptr)
 					{
 						if (tempAttr->data.attribute == manager.lastAttribute)
 						{
 							if (index == 0) {
-								section.attributeList.deleteFirst();
+								section->attributeList.deleteFirst();
 							}
-							else if(index == section.attributeList.getSize()-1){
-								section.attributeList.deleteLast();
+							else if(index == section->attributeList.getSize()-1){
+								section->attributeList.deleteLast();
 							}
 							else {
-								section.attributeList.deleteAt(index);
+								section->attributeList.deleteAt(index);
 							}
-							if (section.attributeList.getSize() <= 0)
+							if (section->attributeList.getSize() <= 0)
 							{
 								deleteSection(manager.firstNumber);
 							}
@@ -270,9 +270,9 @@ private:
 				{
 					if (manager.firstNumber <= 0)
 						return;
-					Section section = getXsection(manager.firstNumber).section;
-					if (section.alive) {
-						size_t count = section.selectorList.getSize();
+					Section* section = getXsection(manager.firstNumber).section;
+					if (section!=nullptr) {
+						size_t count = section->selectorList.getSize();
 						cout << manager.firstNumber << ",S,? == " << count << "\n";
 					}
 					return;
@@ -281,9 +281,9 @@ private:
 				{
 					if (manager.firstNumber <= 0)
 						return;
-					Section section = getXsection(manager.firstNumber).section;
-					if (section.alive) {
-						size_t count = section.attributeList.getSize();
+					Section *section = getXsection(manager.firstNumber).section;
+					if (section!=nullptr) {
+						size_t count = section->attributeList.getSize();
 						if (count>0)
 						{
 							cout << manager.firstNumber << ",A,? == " << count << "\n";
@@ -476,19 +476,17 @@ private:
 						x--;
 					}
 				} while (x > 0);
-				return { external->data.sections[i],skipped};
+				return { &external->data.sections[i],skipped};
 			}
 
 		}
-		Section section;
-		section.alive = false; //we have to check if section returned is alive
-		return { section,  skipped};
+		return { nullptr,  skipped};
 	}
 	bool deleteSection(int x)
 	{
 		SectionAndBlockNumber temp = getXsection(x);
-		Section section = temp.section;
-		if (!section.alive)
+		Section* section = temp.section;
+		if (section==nullptr)
 			return false;
 		Node<ExternalNode>* node = nullptr;
 		int index = temp.n;
@@ -498,9 +496,9 @@ private:
 			node = CSS.getFirst();
 		if (node == nullptr)
 			return false;
-		if (section.alive) //such section exist
+		if (section!=nullptr) //such section exist
 		{
-			section.alive = false;
+			section->alive = false;
 			//section.attributeList.deleteList();
 			//section.selectorList.deleteList();
 			node->data.aliveCount--;
