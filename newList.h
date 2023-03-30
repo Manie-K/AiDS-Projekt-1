@@ -130,6 +130,8 @@ public:
 		}
 		if (temp == nullptr)
 			return;
+
+
 		if (temp->next != nullptr)
 		{
 			temp->next->prev = temp->prev;
