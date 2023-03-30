@@ -15,13 +15,7 @@ public:
 	List() :size(0), first(nullptr), last(nullptr) {}
 	~List()
 	{
-		/*Node<T>* current = first;
-		while (current != nullptr) {
-			Node<T>* next = current->next;
-			delete current;
-			current = next;
-		}*/
-		//deleteList();
+		
 	}
 
 	void deleteList()

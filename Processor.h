@@ -2,7 +2,7 @@
 #include <iostream>
 #include "myString.h"
 #include "Node.h"
-#include "List.h"
+#include "newList.h"
 #include "Types.h"
 #include "CommandManager.h"
 class Processor {
@@ -510,7 +510,7 @@ private:
 				else {
 					if (CSS.getSize() > 1) {
 						CSS.deleteFirst();
-						CSS.decrementSize();
+						//CSS.decrementSize();//?????
 					}
 					else
 					{
