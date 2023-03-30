@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #include "Node.h"
 #include <iostream>
 
@@ -43,6 +42,7 @@ public:
 		}
 		node.next = nullptr;
 		node.prev = last;
+		last->next = &node;
 		last = &node;
 		size++;
 	}
@@ -63,7 +63,6 @@ public:
 			i++;
 			temp = temp->next;
 		}
-
 		return temp;
 	}
 	
@@ -118,6 +117,6 @@ public:
 		}
 		if (index < 0 || index > size - 1)
 			return;
-
+		//tutaj dorobic
 	}
 };
