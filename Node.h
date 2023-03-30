@@ -18,7 +18,7 @@ public:
 		next = temp.next;
 	}
 	Node(const T& dt, Node* p = nullptr, Node* n = nullptr) : data(dt), prev(p),next(n) {};
-	~Node() {}
+	~Node() { next = nullptr; prev = nullptr; }
 
 	friend ostream& operator<<(ostream& os, const Node& node)
 	{

@@ -215,8 +215,8 @@ bool Processor::deleteSection(int x)
 		if (section != nullptr) //such section exist
 		{
 			section->alive = false;
-			section->attributeList.deleteList();
-			section->selectorList.deleteList();
+			section->attributeList.nullifyList();
+			section->selectorList.nullifyList();
 			node->data.aliveCount--;
 			numberOfSections--;
 			if (node->data.aliveCount <= 0)

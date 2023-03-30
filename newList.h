@@ -14,7 +14,11 @@ private:
 public:
 	List() :size(0), first(nullptr), last(nullptr) {}
 	~List() {}
-	void deleteList(){}
+	void nullifyList()
+	{
+		first = nullptr;
+		last = nullptr;
+	}
 
 	size_t getSize() { return size; }
 	void addFirst(Node<T>& node)
