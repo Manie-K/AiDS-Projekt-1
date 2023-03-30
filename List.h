@@ -15,7 +15,7 @@ public:
 	List() :size(0), first(nullptr), last(nullptr) {}
 	~List()
 	{
-		//deleteList();
+		
 	}
 
 	void deleteList()
@@ -42,11 +42,15 @@ public:
 		if (this == nullptr)
 			return;
 		size--;
-		if (size == 0)
+		if (size == 0) {
 			delete first;
+			first = nullptr;
+		}
 		else {
-			if (first == nullptr)
+			if (first == nullptr) {
 				delete first;
+				first = nullptr;
+			}
 			else {
 				first = first->next;
 				delete first->prev;
@@ -72,20 +76,19 @@ public:
 
 	void deleteLast()
 	{
-		if (this == nullptr)
+		if (size==0) {
 			return;
-		size--;
-		if (size == 0)
-			delete last;
-		else {
-			if (last == nullptr)
-				delete last;
-			else {
-				last = last->prev;
-				delete last->next;
-				last->next = nullptr;
-			}
 		}
+		size--;
+		Node<T>* temp = last;
+		if (first== last) {
+			first= last = nullptr;
+		}
+		else {
+			last = last->prev;
+			last->next = nullptr;
+		}
+		delete temp;
 	}
 
 	void addAfter(Node<T>& node, size_t index) //index from 0, so:  addAfter(0) adds after first, addAfter(1) adds after second
@@ -108,10 +111,12 @@ public:
 
 	void deleteAt(size_t index)
 	{
-		if (index >= size - 1 || index <0)
+		if (index >= size || index <0)
 			return;
 		size--;
 		Node<T>* current = first;
+		if (current == nullptr)
+			return;
 		for (int i = 0; i < index; i++)
 		{
 			if(current!=nullptr)
@@ -124,6 +129,7 @@ public:
 			current->next->prev = current->prev;
 		current->next = current->prev = nullptr;
 		delete current;
+		current = nullptr;
 	}
 
 	Node<T>* getFirst()const { 
@@ -139,7 +145,11 @@ public:
 			return nullptr;
 		Node<T>* temp = first;
 		for (int i = 0; i < index; i++)
+		{
+			if (temp == nullptr)
+				return nullptr;
 			temp = temp->next;
+		}
 		return temp;
 	}
 

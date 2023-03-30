@@ -2,7 +2,7 @@
 #include <iostream>
 #include "myString.h"
 #include "Node.h"
-#include "List.h"
+#include "newList.h"
 #include "Types.h"
 #include "CommandManager.h"
 class Processor {
@@ -145,19 +145,19 @@ private:
 				cout << "? == " << numberOfSections << "\n";
 				return;
 			}
-			if (manager.config.lastIsNumber && manager.middleChar =='S')
+			if (manager.config.lastIsNumber && manager.middleChar == 'S')
 			{	// i S j
 				if (manager.firstNumber <= 0 || manager.secondNumber <= 0)
 					return;
-				Section section = getXsection(manager.firstNumber).section;
-				if (section.alive && (section.selectorList.getSize()>manager.secondNumber-1)) 
+				Section* section = getXsection(manager.firstNumber).section;
+				if (section != nullptr && (section->selectorList.getSize() > manager.secondNumber - 1))
 				{
-					cout << manager.firstNumber << ",S," << manager.secondNumber << " == ";
-					if (manager.secondNumber == 1)
-						cout << section.selectorList.getFirst()->data;
-					else
-						cout << section.selectorList.getAt(manager.secondNumber - 1)->data;
-					cout << "\n";
+					if (section->selectorList.getAt(manager.secondNumber - 1) != nullptr)
+					{
+						myString str = section->selectorList.getAt(manager.secondNumber - 1)->data;
+						cout << manager.firstNumber << ",S," << manager.secondNumber << " == ";
+						cout << str << "\n";
+					}
 				}
 				return;
 			}
@@ -167,10 +167,10 @@ private:
 				{
 					if (manager.firstNumber <= 0)
 						return;
-					Section section = getXsection(manager.firstNumber).section;
-					if (section.alive)
+					Section* section = getXsection(manager.firstNumber).section;
+					if (section!=nullptr)
 					{
-						Node<AttributeNode> *temp = section.attributeList.getFirst();
+						Node<AttributeNode> *temp = section->attributeList.getFirst();
 						while(temp!=nullptr)
 						{ 
 							if (temp->data.attribute == manager.lastAttribute)
@@ -231,23 +231,16 @@ private:
 				{
 					if (manager.firstNumber <= 0)
 						return;
-					Section section = getXsection(manager.firstNumber).section;
-					Node<AttributeNode>* tempAttr = section.attributeList.getFirst();
+					Section* section = getXsection(manager.firstNumber).section;//section to kopia???
+					Node<AttributeNode>* tempAttr = section->attributeList.getFirst();
 					int index = 0;
 					while (tempAttr != nullptr)
 					{
 						if (tempAttr->data.attribute == manager.lastAttribute)
 						{
-							if (index == 0) {
-								section.attributeList.deleteFirst();
-							}
-							else {
-								section.attributeList.deleteAt(index);
-							}
-							if (section.attributeList.getSize() <= 0)
-							{
+							section->attributeList.deleteAt(index);
+							if (section->attributeList.getSize() <= 0)
 								deleteSection(manager.firstNumber);
-							}
 							cout << manager.firstNumber << ",D," << manager.lastAttribute << " == deleted\n";
 							return;
 						}
@@ -263,9 +256,9 @@ private:
 				{
 					if (manager.firstNumber <= 0)
 						return;
-					Section section = getXsection(manager.firstNumber).section;
-					if (section.alive) {
-						size_t count = section.selectorList.getSize();
+					Section* section = getXsection(manager.firstNumber).section;
+					if (section!=nullptr) {
+						size_t count = section->selectorList.getSize();
 						cout << manager.firstNumber << ",S,? == " << count << "\n";
 					}
 					return;
@@ -274,9 +267,9 @@ private:
 				{
 					if (manager.firstNumber <= 0)
 						return;
-					Section section = getXsection(manager.firstNumber).section;
-					if (section.alive) {
-						size_t count = section.attributeList.getSize();
+					Section *section = getXsection(manager.firstNumber).section;
+					if (section!=nullptr) {
+						size_t count = section->attributeList.getSize();
 						if (count>0)
 						{
 							cout << manager.firstNumber << ",A,? == " << count << "\n";
@@ -284,14 +277,14 @@ private:
 					}
 					return;
 				}
-				//if (manager.middleChar == 'D')// i D *
-				//{
-				//	if (manager.firstNumber <= 0)
-				//		return;
-				//	if (deleteSection(manager.firstNumber))
-				//		cout << manager.firstNumber << ",D,* == deleted\n";
-				//	return;
-				//}
+				if (manager.middleChar == 'D')// i D *
+				{
+					if (manager.firstNumber <= 0)
+						return;
+					if (deleteSection(manager.firstNumber))
+						cout << manager.firstNumber << ",D,* == deleted\n";
+					return;
+				}
 			}
 			else
 			{
@@ -469,45 +462,52 @@ private:
 						x--;
 					}
 				} while (x > 0);
-				return { external->data.sections[i],skipped};
+				return { &external->data.sections[i],skipped};
 			}
 
 		}
-		Section section;
-		section.alive = false; //we have to check if section returned is alive
-		return { section,  skipped};
+		return { nullptr,  skipped};
 	}
 	bool deleteSection(int x)
 	{
 		SectionAndBlockNumber temp = getXsection(x);
-		Section section = temp.section;
-		if (!section.alive)
+		Section* section = temp.section;
+		if (section==nullptr)
 			return false;
 		Node<ExternalNode>* node = nullptr;
 		int index = temp.n;
-		if (index > 0)
-			node = CSS.getAt(index-1);
-		else
-			node = CSS.getFirst();
-
-		if (section.alive) //such section exist
+		node = CSS.getAt(index);
+		if (node == nullptr)
+			return false;
+		if (section!=nullptr) //such section exist
 		{
-			section.alive = false;
-			section.attributeList.deleteList();
-			section.selectorList.deleteList();
+			section->alive = false;
+			//section.attributeList.deleteList();
+			//section.selectorList.deleteList();
 			node->data.aliveCount--;
 			numberOfSections--;
 			if (node->data.aliveCount <= 0)
 			{
-				if (index > 0)
-					CSS.deleteAt(index - 1);
+				if (index == 0 && CSS.getSize()<=1)
+				{
+					Node<ExternalNode>* tempSect = CSS.getFirst();
+					tempSect->next = nullptr;
+					tempSect->prev = nullptr;
+					tempSect->data.aliveCount = 0;
+					tempSect->data.counter = 0;
+					tempSect->data.sections = new Section[T];
+				}
 				else
-					CSS.deleteFirst();
-				CSS.decrementSize();
-				
+					CSS.deleteAt(index);
+				if (CSS.getFirst() == nullptr)
+				{
+					Node<ExternalNode>* newNode = new Node<ExternalNode>;
+					CSS.addFirst(*newNode);
+				}
 			}
+			return true;
 		}
-		return true;
+		return false;
 	}
 };
 
