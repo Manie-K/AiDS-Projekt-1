@@ -11,7 +11,8 @@ typedef struct {
 struct Section{
 	List<myString> selectorList;
 	List<AttributeNode> attributeList;
-	bool alive = true;
+	bool alive;
+	Section() { alive = true;}
 };
 
 struct ExternalNode{
@@ -36,6 +37,6 @@ struct CommandDispatchConfig {
 
 struct SectionAndBlockNumber
 {
-	Section& section;
+	Section* section;
 	int n;
 };
