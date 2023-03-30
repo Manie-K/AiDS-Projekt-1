@@ -31,7 +31,7 @@ public:
 		}
 		node.next = first;
 		node.prev = nullptr;
-		first = node;
+		first = &node;
 		size++;
 	}
 	void addLast(Node<T>& node)
@@ -43,7 +43,7 @@ public:
 		}
 		node.next = nullptr;
 		node.prev = last;
-		last = node;
+		last = &node;
 		size++;
 	}
 	Node<T>* getFirst(){return first; }
@@ -56,7 +56,7 @@ public:
 			return getLast();
 		if (index < 0 || index > size - 1)
 			return nullptr;
-		Node<T> temp = first;
+		Node<T>* temp = first;
 		int i = 0;
 		while (temp != nullptr && i < index)
 		{

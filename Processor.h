@@ -145,22 +145,19 @@ private:
 				cout << "? == " << numberOfSections << "\n";
 				return;
 			}
-			if (manager.config.lastIsNumber && manager.middleChar =='S')
+			if (manager.config.lastIsNumber && manager.middleChar == 'S')
 			{	// i S j
 				if (manager.firstNumber <= 0 || manager.secondNumber <= 0)
 					return;
 				Section* section = getXsection(manager.firstNumber).section;
-				if (section!=nullptr && (section->selectorList.getSize()>manager.secondNumber-1)) 
+				if (section != nullptr && (section->selectorList.getSize() > manager.secondNumber - 1))
 				{
-					myString str = "";
-					if (manager.secondNumber == 1)
-						if(section->selectorList.getFirst()!=nullptr)
-							str= section->selectorList.getFirst()->data;
-					else
-						if(section->selectorList.getAt(manager.secondNumber - 1)!=nullptr)
-							str = section->selectorList.getAt(manager.secondNumber - 1)->data;
-					cout << manager.firstNumber << ",S," << manager.secondNumber << " == ";
-					cout << str << "\n";
+					if (section->selectorList.getAt(manager.secondNumber - 1) != nullptr)
+					{
+						myString str = section->selectorList.getAt(manager.secondNumber - 1)->data;
+						cout << manager.firstNumber << ",S," << manager.secondNumber << " == ";
+						cout << str << "\n";
+					}
 				}
 				return;
 			}
@@ -241,20 +238,9 @@ private:
 					{
 						if (tempAttr->data.attribute == manager.lastAttribute)
 						{
-							if (index == 0) {
-								section->attributeList.deleteFirst();
-							}
-							else if(index == section->attributeList.getSize()-1){
-								section->attributeList.deleteLast();
-							}
-							else {
-								section->attributeList.deleteAt(index);
-							}
+							section->attributeList.deleteAt(index);
 							if (section->attributeList.getSize() <= 0)
-							{
 								deleteSection(manager.firstNumber);
-							}
-
 							cout << manager.firstNumber << ",D," << manager.lastAttribute << " == deleted\n";
 							return;
 						}
@@ -490,10 +476,7 @@ private:
 			return false;
 		Node<ExternalNode>* node = nullptr;
 		int index = temp.n;
-		if (index > 0)
-			node = CSS.getAt(index);
-		else
-			node = CSS.getFirst();
+		node = CSS.getAt(index);
 		if (node == nullptr)
 			return false;
 		if (section!=nullptr) //such section exist
@@ -505,23 +488,17 @@ private:
 			numberOfSections--;
 			if (node->data.aliveCount <= 0)
 			{
-				if (index > 0)
-					CSS.deleteAt(index);
-				else {
-					if (CSS.getSize() > 1) {
-						CSS.deleteFirst();
-						//CSS.decrementSize();//?????
-					}
-					else
-					{
-						Node<ExternalNode>* tempSect = CSS.getFirst();
-						tempSect->next = nullptr;
-						tempSect->prev= nullptr;
-						tempSect->data.aliveCount = 0;
-						tempSect->data.counter = 0;
-						tempSect->data.sections = new Section[T];
-					}
+				if (index == 0 && CSS.getSize()<=1)
+				{
+					Node<ExternalNode>* tempSect = CSS.getFirst();
+					tempSect->next = nullptr;
+					tempSect->prev = nullptr;
+					tempSect->data.aliveCount = 0;
+					tempSect->data.counter = 0;
+					tempSect->data.sections = new Section[T];
 				}
+				else
+					CSS.deleteAt(index);
 				if (CSS.getFirst() == nullptr)
 				{
 					Node<ExternalNode>* newNode = new Node<ExternalNode>;
