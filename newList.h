@@ -106,6 +106,8 @@ public:
 	}
 	void deleteAt(int index)
 	{
+		if (size == 0)
+			return;
 		if (index == 0)
 		{
 			deleteFirst();
@@ -121,10 +123,8 @@ public:
 		
 		Node<T>* temp = first;
 		int i = 0;
-		while (i < index)
+		while (i < index && temp != nullptr)
 		{
-			if (temp == nullptr)
-				return;
 			i++;
 			temp = temp->next;
 		}
@@ -139,7 +139,7 @@ public:
 			temp->prev->next= temp->next;
 		}
 		size--;
-		delete temp;
+		//delete temp;
 		temp = nullptr;
 	}
 };

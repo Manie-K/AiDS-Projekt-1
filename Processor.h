@@ -482,8 +482,8 @@ private:
 		if (section!=nullptr) //such section exist
 		{
 			section->alive = false;
-			//section.attributeList.deleteList();
-			//section.selectorList.deleteList();
+			section->attributeList.deleteList();
+			section->selectorList.deleteList();
 			node->data.aliveCount--;
 			numberOfSections--;
 			if (node->data.aliveCount <= 0)
