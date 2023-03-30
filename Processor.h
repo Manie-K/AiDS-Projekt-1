@@ -152,12 +152,15 @@ private:
 				Section section = getXsection(manager.firstNumber).section;
 				if (section.alive && (section.selectorList.getSize()>manager.secondNumber-1)) 
 				{
-					cout << manager.firstNumber << ",S," << manager.secondNumber << " == ";
+					myString str = "";
 					if (manager.secondNumber == 1)
-						cout << section.selectorList.getFirst()->data;
+						if(section.selectorList.getFirst()!=nullptr)
+							str= section.selectorList.getFirst()->data;
 					else
-						cout << section.selectorList.getAt(manager.secondNumber - 1)->data;
-					cout << "\n";
+						if(section.selectorList.getAt(manager.secondNumber - 1)!=nullptr)
+							str = section.selectorList.getAt(manager.secondNumber - 1)->data;
+					cout << manager.firstNumber << ",S," << manager.secondNumber << " == ";
+					cout << str << "\n";
 				}
 				return;
 			}
@@ -231,7 +234,7 @@ private:
 				{
 					if (manager.firstNumber <= 0)
 						return;
-					Section section = getXsection(manager.firstNumber).section;
+					Section section = getXsection(manager.firstNumber).section;//section to kopia???
 					Node<AttributeNode>* tempAttr = section.attributeList.getFirst();
 					int index = 0;
 					while (tempAttr != nullptr)
@@ -241,6 +244,9 @@ private:
 							if (index == 0) {
 								section.attributeList.deleteFirst();
 							}
+							else if(index == section.attributeList.getSize()-1){
+								section.attributeList.deleteLast();
+							}
 							else {
 								section.attributeList.deleteAt(index);
 							}
@@ -248,6 +254,7 @@ private:
 							{
 								deleteSection(manager.firstNumber);
 							}
+
 							cout << manager.firstNumber << ",D," << manager.lastAttribute << " == deleted\n";
 							return;
 						}
@@ -284,14 +291,14 @@ private:
 					}
 					return;
 				}
-				//if (manager.middleChar == 'D')// i D *
-				//{
-				//	if (manager.firstNumber <= 0)
-				//		return;
-				//	if (deleteSection(manager.firstNumber))
-				//		cout << manager.firstNumber << ",D,* == deleted\n";
-				//	return;
-				//}
+				if (manager.middleChar == 'D')// i D *
+				{
+					if (manager.firstNumber <= 0)
+						return;
+					if (deleteSection(manager.firstNumber))
+						cout << manager.firstNumber << ",D,* == deleted\n";
+					return;
+				}
 			}
 			else
 			{
@@ -486,28 +493,46 @@ private:
 		Node<ExternalNode>* node = nullptr;
 		int index = temp.n;
 		if (index > 0)
-			node = CSS.getAt(index-1);
+			node = CSS.getAt(index);
 		else
 			node = CSS.getFirst();
-
+		if (node == nullptr)
+			return false;
 		if (section.alive) //such section exist
 		{
 			section.alive = false;
-			section.attributeList.deleteList();
-			section.selectorList.deleteList();
+			//section.attributeList.deleteList();
+			//section.selectorList.deleteList();
 			node->data.aliveCount--;
 			numberOfSections--;
 			if (node->data.aliveCount <= 0)
 			{
 				if (index > 0)
-					CSS.deleteAt(index - 1);
-				else
-					CSS.deleteFirst();
-				CSS.decrementSize();
-				
+					CSS.deleteAt(index);
+				else {
+					if (CSS.getSize() > 1) {
+						CSS.deleteFirst();
+						CSS.decrementSize();
+					}
+					else
+					{
+						Node<ExternalNode>* tempSect = CSS.getFirst();
+						tempSect->next = nullptr;
+						tempSect->prev= nullptr;
+						tempSect->data.aliveCount = 0;
+						tempSect->data.counter = 0;
+						tempSect->data.sections = new Section[T];
+					}
+				}
+				if (CSS.getFirst() == nullptr)
+				{
+					Node<ExternalNode>* newNode = new Node<ExternalNode>;
+					CSS.addFirst(*newNode);
+				}
 			}
+			return true;
 		}
-		return true;
+		return false;
 	}
 };
 
