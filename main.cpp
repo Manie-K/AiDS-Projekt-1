@@ -13,6 +13,10 @@ int main()
 		inputChar = getchar();
 		processor.manageInput(inputChar);
 	} while (inputChar != END_KEY);
+<<<<<<< Updated upstream
 	
+=======
+
+>>>>>>> Stashed changes
 	return 1;
 }
