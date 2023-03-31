@@ -34,7 +34,8 @@ public:
 		}
 		node.next = first;
 		node.prev = nullptr;
-		first->prev = &node;
+		if(first!=nullptr)
+			first->prev = &node;
 		first = &node;
 		size++;
 	}
@@ -47,7 +48,8 @@ public:
 		}
 		node.next = nullptr;
 		node.prev = last;
-		last->next = &node;
+		if(last!=nullptr)
+			last->next = &node;
 		last = &node;
 		size++;
 	}
@@ -82,7 +84,7 @@ public:
 			last = nullptr;
 			size--;
 		}
-		if (first != nullptr) {
+		if (first != nullptr&&first->next!=nullptr) {
 			first = first->next;
 			delete first->prev;
 			first->prev = nullptr;
@@ -99,7 +101,7 @@ public:
 			deleteFirst();
 			return;
 		}
-		if (last != nullptr)
+		if (last != nullptr && last->prev!=nullptr)
 		{
 			last = last->prev;
 			delete last->next;
@@ -110,7 +112,7 @@ public:
 	}
 	void deleteAt(int index)
 	{
-		if (size == 0)
+		if (size == 0 || index < 0 || index > size - 1)
 			return;
 		if (index == 0)
 		{
@@ -122,9 +124,7 @@ public:
 			deleteLast();
 			return;
 		}
-		if (index < 0 || index > size - 1)
-			return;
-		
+		size--;
 		Node<T>* temp = first;
 		int i = 0;
 		while (i < index && temp != nullptr)
@@ -132,19 +132,19 @@ public:
 			i++;
 			temp = temp->next;
 		}
-		if (temp == nullptr)
+		if (temp == nullptr){
 			return;
-
+		}
 
 		if (temp->next != nullptr)
 		{
 			temp->next->prev = temp->prev;
 		}
-		if (temp->prev != nullptr)
+		if(temp->prev != nullptr)
 		{
-			temp->prev->next= temp->next;
+			temp->prev->next = temp->next;
 		}
-		size--;
+		delete temp;
 		temp = nullptr;
 	}
 };
