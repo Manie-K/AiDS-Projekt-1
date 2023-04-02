@@ -17,6 +17,10 @@ struct Section{
 	List<myString> selectorList;
 	List<AttributeNode> attributeList;
 	bool alive = true;
+	~Section() {
+		selectorList.nullifyList();
+		attributeList.nullifyList();
+	}
 };
 
 struct ExternalNode{

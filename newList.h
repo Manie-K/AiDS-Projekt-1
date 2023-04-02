@@ -18,9 +18,14 @@ public:
 	{
 		first = nullptr;
 		last = nullptr;
+		size = 0;
 	}
 
-	size_t getSize() { return size; }
+	size_t getSize() { 
+		if (first == nullptr)
+			return 0;
+		return size; 
+	}
 	void addFirst(Node<T>& node)
 	{
 		if (size == 0)

@@ -77,9 +77,14 @@ void Processor::inputCSS(const char inputChar)
 			return;
 		else if ((inputChar == ',' && !attributes) || inputChar == '{')
 		{
+			currentInputString.trim();
+			if (currentInputString == "")//global attriubutes
+			{
+				attributes = true;
+				return;
+			}
 			saveSelector();
 			if (inputChar == '{') {
-				numberOfSections++;
 				attributes = true;
 			}
 		}
@@ -107,7 +112,7 @@ void Processor::inputCSS(const char inputChar)
 	}
 void Processor::inputCommand(const char inputChar)
 	{
-		if (inputChar != ENTER_KEY)
+		if (inputChar != ENTER_KEY && inputChar != END_KEY)
 			currentInputString.pushCharAtEnd(inputChar);
 		else //command has ended
 		{
@@ -180,6 +185,7 @@ void Processor::addNewNodeAndSection()
 	}
 void Processor::endSection()
 	{
+		numberOfSections++;
 		currentInputString.trim();
 		if (!(currentInputString == "\0")) //the previous character wasnt ';', so we have to save attribute 
 			saveAttribute();
@@ -341,11 +347,15 @@ void Processor::commandDispatcher()
 void Processor::iSj_Command()
 	{
 		Section* section = getXsection(manager.firstNumber).section;
-		if (section != nullptr && (section->selectorList.getSize() > manager.secondNumber - 1))
+		if (section == nullptr)
+			return;
+		if (section->selectorList.getSize() > manager.secondNumber - 1)
 		{
 			if (section->selectorList.getAt(manager.secondNumber - 1) != nullptr)
 			{
 				myString str = section->selectorList.getAt(manager.secondNumber - 1)->data;
+				if (str == "")
+					return;
 				cout << manager.firstNumber << ",S," << manager.secondNumber << " == ";
 				cout << str << "\n";
 			}
@@ -412,29 +422,32 @@ void Processor::zEn_Command()
 		}
 	}
 void Processor::iDn_Command()
+{
+	Section* section = getXsection(manager.firstNumber).section;
+	if (section == nullptr)
+		return;
+	Node<AttributeNode>* tempAttr = section->attributeList.getFirst();
+	int index = 0;
+	while (tempAttr != nullptr)
 	{
-		Section* section = getXsection(manager.firstNumber).section;//section to kopia???
-		Node<AttributeNode>* tempAttr = section->attributeList.getFirst();
-		int index = 0;
-		while (tempAttr != nullptr)
+		if (tempAttr->data.attribute == manager.lastAttribute)
 		{
-			if (tempAttr->data.attribute == manager.lastAttribute)
-			{
-				section->attributeList.deleteAt(index);
-				if (section->attributeList.getSize() <= 0)
-					deleteSection(manager.firstNumber);
-				cout << manager.firstNumber << ",D," << manager.lastAttribute << " == deleted\n";
-				return;
-			}
-			index++;
-			tempAttr = tempAttr->next;
+			section->attributeList.deleteAt(index);
+			if (section->attributeList.getSize() <= 0)
+				deleteSection(manager.firstNumber);
+			cout << manager.firstNumber << ",D," << manager.lastAttribute << " == deleted\n";
+			return;
 		}
-	}
+		index++;
+		tempAttr = tempAttr->next;
+		}
+}
 void Processor::iSquestion_Command()
 	{
 		Section* section = getXsection(manager.firstNumber).section;
 		if (section != nullptr) {
-			size_t count = section->selectorList.getSize();
+			size_t count = 0;
+			count = section->selectorList.getSize();
 			cout << manager.firstNumber << ",S,? == " << count << "\n";
 		}
 	}
