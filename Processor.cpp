@@ -165,22 +165,22 @@ void Processor::saveAttribute()
 		delete attributeNode;
 		attributeNode = new Node<AttributeNode>;
 	}
-void Processor::addSection(int index, int whichExternalNode)
+void Processor::addSection(int index, int whichExternalNode, Section& sect)
 	{
 		CSS.getAt(whichExternalNode)->data.counter++;
 		CSS.getAt(whichExternalNode)->data.aliveCount++;
-		CSS.getAt(whichExternalNode)->data.sections[index].selectorList = section->selectorList;
-		CSS.getAt(whichExternalNode)->data.sections[index].attributeList = section->attributeList;
+		CSS.getAt(whichExternalNode)->data.sections[index].selectorList = sect.selectorList;
+		CSS.getAt(whichExternalNode)->data.sections[index].attributeList = sect.attributeList;
 		CSS.getAt(whichExternalNode)->data.sections[index].alive = true;
 	}
-void Processor::addNewNodeAndSection()
+void Processor::addNewNodeAndSection(Section& sect)
 	{
 		Node<ExternalNode>* newNode = new Node<ExternalNode>;
 		CSS.addLast(*newNode);
 		CSS.getLast()->data.counter++;
 		CSS.getLast()->data.aliveCount++;
-		CSS.getLast()->data.sections[0].selectorList = section->selectorList;
-		CSS.getLast()->data.sections[0].attributeList = section->attributeList;
+		CSS.getLast()->data.sections[0].selectorList = sect.selectorList;
+		CSS.getLast()->data.sections[0].attributeList = sect.attributeList;
 		CSS.getLast()->data.sections[0].alive = true;
 	}
 void Processor::endSection()
@@ -190,6 +190,7 @@ void Processor::endSection()
 		if (!(currentInputString == "\0")) //the previous character wasnt ';', so we have to save attribute 
 			saveAttribute();
 
+		Section* tempSect = new Section(*section);
 		Node<ExternalNode>* temp = CSS.getFirst();
 		int whichExternalNode = 0;
 		while (temp != nullptr)
@@ -200,9 +201,9 @@ void Processor::endSection()
 			whichExternalNode++;
 		}
 		if (temp == nullptr) //there isn't any empty space, need to add new node
-			addNewNodeAndSection();
+			addNewNodeAndSection(*tempSect);
 		else
-			addSection(temp->data.counter, whichExternalNode);
+			addSection(temp->data.counter, whichExternalNode, *tempSect);
 
 		delete section;
 		section = new Section;

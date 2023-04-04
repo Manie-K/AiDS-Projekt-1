@@ -13,12 +13,13 @@ private:
 	size_t size;
 public:
 	List() :size(0), first(nullptr), last(nullptr) {}
-	~List() {}
+	List(const List<T>& other) : size(other.size), first(other.first), last(other.last) {};
+	~List() { nullifyList(); }
 	void nullifyList()
 	{
-		first = nullptr;
-		last = nullptr;
 		size = 0;
+		first = nullptr;
+		last = nullptr;	
 	}
 
 	size_t getSize() { 

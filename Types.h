@@ -17,9 +17,12 @@ struct Section{
 	List<myString> selectorList;
 	List<AttributeNode> attributeList;
 	bool alive = true;
-	~Section() {
-		selectorList.nullifyList();
-		attributeList.nullifyList();
+	Section(){}
+	Section(const Section& other)
+	{
+		selectorList = List<myString>(other.selectorList);
+		attributeList = List<AttributeNode>(other.attributeList);
+		alive = other.alive;
 	}
 };
 

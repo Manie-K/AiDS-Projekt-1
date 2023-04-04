@@ -28,8 +28,8 @@ private:
 	void saveAttribute();
 	
 	SectionAndBlockNumber getXsection(int x);
-	void addSection(int index, int whichExternalNode);
-	void addNewNodeAndSection();
+	void addSection(int index, int whichExternalNode, Section& sect);
+	void addNewNodeAndSection(Section& sect);
 	void endSection();
 	bool deleteSection(int x);
 
