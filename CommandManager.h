@@ -4,9 +4,9 @@
 class CommandManager {
 	friend class Processor;
 private:
-	const int neverUsedChar = '@', asciiMinNum = 48, asciiMaxNum = 57;
+	const int asciiMinNum = 48, asciiMaxNum = 57;
 	int firstNumber, secondNumber;
-	char middleChar, endChar;
+	char middleChar;
 	myString lastAttribute, firstAttribute;
 	CommandDispatchConfig config;
 private:

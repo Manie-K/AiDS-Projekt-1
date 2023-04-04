@@ -1,11 +1,8 @@
 #pragma once
 #include <iostream>
 #include "myString.h"
-#include "Node.h"
 #include "newList.h"
 
-#define END_KEY '\xff'
-#define ENTER_KEY '\n'
 #define Tcount 8
 
 struct AttributeNode {

@@ -15,8 +15,7 @@ public:
 	List() :size(0), first(nullptr), last(nullptr) {}
 	List(const List<T>& other) : size(other.size), first(other.first), last(other.last) {};
 	~List() { nullifyList(); }
-	void nullifyList()
-	{
+	void nullifyList(){
 		size = 0;
 		first = nullptr;
 		last = nullptr;	

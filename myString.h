@@ -1,6 +1,15 @@
 #include <iostream>
 #include <string.h>
 
+#define END_KEY '\xff'
+#define ENTER_KEY '\n'
+#define SPACE_KEY ' '
+#define STR_END_KEY '\0'
+#define TAB_KEY '\t'
+#define CARRIAGE_KEY '\r'
+#define VERT_TAB_KEY '\v'
+#define FORM_KEY '\f'
+
 using namespace std;
 
 class myString {

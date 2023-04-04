@@ -19,9 +19,7 @@ myString::myString(const char* newData)
 	size = strlen(newData) + 1;
 	data = new char[size];
 	for (int i = 0; i < size; i++)
-	{
 		data[i] = newData[i];
-	}
 }
 
 myString::myString(const myString& temp)
@@ -35,16 +33,14 @@ myString::myString(const myString& temp)
 	size = temp.size;
 	data = new char[size];
 	for (int i = 0; i < size; i++)
-	{
 		data[i] = temp.data[i];
-	}
 }
 
 void myString::pushCharAtEnd(const char ch)
 {
 	if (this == nullptr || data == nullptr)
 		return;
-	if (ch != '\0')
+	if (ch != STR_END_KEY)
 	{
 		char* temp = new char[size];
 		for (int i = 0; i < size; i++)
@@ -58,7 +54,7 @@ void myString::pushCharAtEnd(const char ch)
 			data[i] = temp[i];
 		}
 		data[size - 2] = ch;
-		data[size - 1] = '\0';
+		data[size - 1] = STR_END_KEY;
 
 		delete[] temp;
 		temp = nullptr;
@@ -74,7 +70,8 @@ void myString::trim()
 	
 	for (int i = 0; i < size; i++)
 	{
-		if (data[i] == '\0' || data[i] == ' ' || data[i] == '\n' || data[i] == '\t' || data[i] == '\r' || data[i] == '\v' || data[i] == '\f')
+		if (data[i] == STR_END_KEY || data[i] == SPACE_KEY || data[i] == ENTER_KEY || data[i] == TAB_KEY || data[i] == CARRIAGE_KEY
+			|| data[i] == VERT_TAB_KEY || data[i] == FORM_KEY)
 			beginCount++;
 		else
 			break;
@@ -82,7 +79,8 @@ void myString::trim()
 
 	for (int i = size - 1; i >= 0; i--)
 	{
-		if (data[i] == '\0' || data[i] == ' ' || data[i] == '\n' || data[i] == '\t' || data[i] == '\r' || data[i] == '\v' || data[i] == '\f')
+		if (data[i] == STR_END_KEY || data[i] == SPACE_KEY || data[i] == ENTER_KEY || data[i] == TAB_KEY || data[i] == CARRIAGE_KEY
+			|| data[i] == VERT_TAB_KEY || data[i] == FORM_KEY)
 			endCount++;
 		else
 			break;
@@ -92,7 +90,7 @@ void myString::trim()
 	{
 		delete[] data;
 		data = new char[1];
-		data[0] = '\0';
+		data[0] = STR_END_KEY;
 		size = 1;
 		return;
 	}
@@ -103,13 +101,13 @@ void myString::trim()
 	{
 		tab[i - beginCount] = data[i];
 	}
-	tab[newSize - 1] = '\0';
+	tab[newSize - 1] = STR_END_KEY;
 	delete[] data;
 	size = newSize;
 	data = new char[size];
 	for (int i = 0; i < size; i++)
 		data[i] = tab[i];
-	data[size - 1] = '\0';
+	data[size - 1] = STR_END_KEY;
 	delete[] tab;  
 }
 
@@ -131,7 +129,6 @@ int myString::toInt() const
 		result += (int)(data[i] - asciiOffset) * tenPower;
 		tenPower *= 10;
 	}
-
 	return result;
 }
 
@@ -186,8 +183,8 @@ myString& myString::operator=(const char* s)
 char myString::operator[](size_t index) const
 {
 	if (this == nullptr || data == nullptr)
-		return ' ';
+		return SPACE_KEY;
 	if (index >= 0 && index < size)
 		return (char)data[index];
-	return ' ';
+	return SPACE_KEY;
 }

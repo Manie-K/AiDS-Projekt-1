@@ -20,7 +20,6 @@ public:
 	void manageInput(const char inputChar);
 private:
 	bool modeManager(const char inputChar);
-
 	void inputCSS(const char inputChar);
 	void inputCommand(const char inputChar);
 	

@@ -7,15 +7,14 @@ CommandManager::~CommandManager() {}
 void CommandManager::reset()
 {
 	firstNumber = secondNumber = 0;
-	middleChar = endChar = neverUsedChar;
+	middleChar = ' ';
 	lastAttribute = firstAttribute = "";
 	config = { false, false, false, false, false };
 }
 
 void CommandManager::handleInput(const myString& in)
 {
-	myString firstNumberStr = "", secondNumberStr = "";
-	myString input = in;
+	myString input = in, firstNumberStr = "", secondNumberStr = "";
 	int i = 0;
 	bool isNumber = false;
 
@@ -47,7 +46,6 @@ void CommandManager::handleInput(const myString& in)
 
 	for (i; i < input.getSize(); i++) {
 		if (input[i] == '?' || input[i] == '*') {
-			endChar = input[i];
 			config.lastIsSymbol = true;
 			break;
 		}
